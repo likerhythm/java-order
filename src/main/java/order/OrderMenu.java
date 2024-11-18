@@ -42,4 +42,12 @@ public enum OrderMenu {
     public boolean isDrink() {
         return type.equals("drink");
     }
+
+    public boolean isMain() {
+        return type.equals("main");
+    }
+
+    public boolean isService() {
+        return type.equals("service");
+    }
 }

@@ -1,6 +1,7 @@
 package order;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Order {
 
@@ -9,6 +10,14 @@ public class Order {
     public Order(final Map<OrderMenu, Long> orders) {
         validateAllDrink(orders);
         this.orders = orders;
+        addServiceDumpling(orders);
+    }
+
+    private void addServiceDumpling(Map<OrderMenu, Long> orders) {
+        long serviceCount = orders.keySet().stream()
+                .filter(OrderMenu::isMain)
+                .count();
+        orders.merge(OrderMenu.SERVICE_DUMPLING, serviceCount, Long::sum);
     }
 
     private void validateAllDrink(Map<OrderMenu, Long> orders) {
@@ -26,5 +35,15 @@ public class Order {
                     return key.calcFee(value);
                 })
                 .sum();
+    }
+
+    public ReceiptOrderDto getReceiptDto() {
+        Map<OrderMenu, Long> services = orders.entrySet().stream()
+                .filter(entry -> entry.getKey().isService())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue
+                ));
+        return new ReceiptOrderDto(services);
     }
 }
