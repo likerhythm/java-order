@@ -13,4 +13,11 @@ public class OrderConverterTest {
         Map<String, String> menuNameAndQuantity = Map.of("콜라", "1");
         Assertions.assertThrows(IllegalArgumentException.class, () -> orderConverter.convert(menuNameAndQuantity));
     }
+
+    @Test
+    void emptyOrderTest() {
+        OrderConverter orderConverter = new OrderConverter();
+        Map<String, String> menuNameAndQuantity = Map.of("피자", "0");
+        Assertions.assertEquals(0, orderConverter.convert(menuNameAndQuantity).getOrderMenuDto().getOrders().size());
+    }
 }

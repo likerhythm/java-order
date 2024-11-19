@@ -49,7 +49,7 @@ public class Order {
 
     private void validateAllDrink(Map<Menu, Long> orders) {
         boolean isAllDrink = orders.keySet().stream().allMatch(Menu::isDrink);
-        if (isAllDrink) {
+        if (isAllDrink && !orders.isEmpty()) {
             throw new IllegalArgumentException("음료만으로는 주문할 수 없습니다.");
         }
     }
