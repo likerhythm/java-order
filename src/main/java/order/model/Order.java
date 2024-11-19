@@ -2,6 +2,7 @@ package order.model;
 
 import order.dto.OrderDetailDto;
 import order.dto.OrderMenuDto;
+import order.error.ErrorMessage;
 
 import java.util.Map;
 import java.util.function.Predicate;
@@ -26,7 +27,7 @@ public class Order {
                 })
                 .sum();
         if (fee < 30000) {
-            throw new IllegalArgumentException("최소 주문 금액을 만족하지 못했습니다.");
+            throw new IllegalArgumentException(ErrorMessage.LESS_THAN_LOWER_ORDER_FEE_LIMIT);
         }
 
         return fee;
@@ -51,7 +52,7 @@ public class Order {
     private void validateAllDrink(Map<Menu, Long> orders) {
         boolean isAllDrink = orders.keySet().stream().allMatch(Menu::isDrink);
         if (isAllDrink && !orders.isEmpty()) {
-            throw new IllegalArgumentException("음료만으로는 주문할 수 없습니다.");
+            throw new IllegalArgumentException(ErrorMessage.ONLY_DRINK_IN_ORDER);
         }
     }
 

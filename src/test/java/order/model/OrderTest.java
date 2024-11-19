@@ -1,5 +1,6 @@
 package order.model;
 
+import order.dto.OrderDetailDto;
 import order.dto.OrderMenuDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,9 +12,14 @@ public class OrderTest {
 
     @Test
     void serviceTest() {
-        Order order = new Order(new HashMap<>(Map.of(Menu.PIZZA, 1L)));
+        long quantity = 10L;
+        Order order = new Order(new HashMap<>(Map.of(Menu.PIZZA, quantity)));
         OrderMenuDto dto = order.getOrderMenuDto();
-        Assertions.assertEquals(1, dto.getServices().size());
+        Map<String, OrderDetailDto> services = dto.getServices();
+        long serviceCount = services.values().stream()
+                .mapToLong(OrderDetailDto::getQuantity)
+                .sum();
+        Assertions.assertEquals(quantity, serviceCount);
     }
 
     @Test

@@ -1,5 +1,7 @@
 package order.model;
 
+import order.error.ErrorMessage;
+
 import java.util.Arrays;
 
 public enum Menu {
@@ -36,7 +38,7 @@ public enum Menu {
         return Arrays.stream(Menu.values())
                 .filter(orderMenu -> orderMenu.name.equals(targetName))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("주문 형식이 잘못되었습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.WRONG_ORDER_FORMAT));
     }
 
     public boolean isDrink() {
