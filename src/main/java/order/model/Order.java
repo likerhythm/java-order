@@ -2,7 +2,6 @@ package order.model;
 
 import order.dto.OrderDetailDto;
 import order.dto.OrderMenuDto;
-import order.dto.ReceiptDto;
 
 import java.util.Map;
 import java.util.function.Predicate;
@@ -18,6 +17,27 @@ public class Order {
         addServiceDumpling(orders);
     }
 
+    public long calcFee() {
+        long fee = orders.entrySet().stream()
+                .mapToLong(entry -> {
+                    Menu key = entry.getKey();
+                    Long value = entry.getValue();
+                    return key.calcFee(value);
+                })
+                .sum();
+        if (fee < 30000) {
+            throw new IllegalArgumentException("최소 주문 금액을 만족하지 못했습니다.");
+        }
+
+        return fee;
+    }
+
+    public OrderMenuDto getOrderMenuDto() {
+        Map<String, OrderDetailDto> nonServiceMenus = filterOrdersBy(entry -> !entry.getKey().isService());
+        Map<String, OrderDetailDto> serviceMenus = filterOrdersBy(entry -> entry.getKey().isService());
+        return new OrderMenuDto(nonServiceMenus, serviceMenus);
+    }
+
     private void addServiceDumpling(Map<Menu, Long> orders) {
         long serviceCount = orders.keySet().stream()
                 .filter(Menu::isMain)
@@ -30,22 +50,6 @@ public class Order {
         if (isAllDrink) {
             throw new IllegalArgumentException("음료만으로는 주문할 수 없습니다.");
         }
-    }
-
-    public long calcOrderFee() {
-        return orders.entrySet().stream()
-                .mapToLong(entry -> {
-                    Menu key = entry.getKey();
-                    Long value = entry.getValue();
-                    return key.calcFee(value);
-                })
-                .sum();
-    }
-
-    public OrderMenuDto getOrderMenuDto() {
-        Map<String, OrderDetailDto> nonServiceMenus = filterOrdersBy(entry -> !entry.getKey().isService());
-        Map<String, OrderDetailDto> serviceMenus = filterOrdersBy(entry -> entry.getKey().isService());
-        return new OrderMenuDto(nonServiceMenus, serviceMenus);
     }
 
     private Map<String, OrderDetailDto> filterOrdersBy(Predicate<Map.Entry<Menu, Long>> predicate) {

@@ -14,7 +14,8 @@ public class InputViewTest {
     @ParameterizedTest
     @ValueSource(strings = {
             "콜라(2개)",
-            "콜라(2개), 햄버거(1개)"
+            "콜라(2개), 햄버거(1개)",
+            "치킨(1개), 오렌지 주스(2개)"
     })
     void validOrderInputTest(String input) {
         inputView = new InputView(new Scanner(new ByteArrayInputStream(input.getBytes())));
@@ -29,7 +30,6 @@ public class InputViewTest {
             "콜라(2개",
             "(2개)",
             "(2개), 햄버거(1개)",
-            "콜라 (1개)",
             "콜라(1 개)",
             "콜라(한개)",
             ", 햄버거(1개)",

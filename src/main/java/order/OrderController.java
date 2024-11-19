@@ -7,7 +7,6 @@ import order.util.InputParser;
 import order.view.InputView;
 import order.view.OutputView;
 
-import java.util.IllegalFormatPrecisionException;
 import java.util.Map;
 
 public class OrderController {
@@ -28,13 +27,21 @@ public class OrderController {
     }
 
     public void start() {
-        String inputOrder = inputView.getOrder();
-        Map<String, String> parsedOrder = inputParser.parseOrder(inputOrder);
-        Order order = orderService.convertToOrder(parsedOrder);
-        long orderFee = orderService.calcOrderFee(order);
+        Order order = getOrderFromUser();
+        ReceiptDto receiptDto = makeReceiptDto(order);
+        outputView.printReceipt(receiptDto);
+    }
+
+    private ReceiptDto makeReceiptDto(Order order) {
+        long orderFee = order.calcFee();
         long deliveryFee = orderService.calcDeliveryFee(orderFee);
         OrderMenuDto orderMenuDto = order.getOrderMenuDto();
-        ReceiptDto receiptDto = new ReceiptDto(orderMenuDto, deliveryFee, orderFee + deliveryFee);
-        outputView.printReceipt(receiptDto);
+        return new ReceiptDto(orderMenuDto, deliveryFee, orderFee + deliveryFee);
+    }
+
+    private Order getOrderFromUser() {
+        String inputOrder = inputView.getOrder();
+        Map<String, String> parsedOrder = inputParser.parseOrder(inputOrder);
+        return orderService.convertToOrder(parsedOrder);
     }
 }

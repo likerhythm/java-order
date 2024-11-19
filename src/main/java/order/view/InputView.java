@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class InputView {
 
-    private static final String ORDER_INPUT_UNIT_FORMAT = "[가-힣a-zA-Z0-9]+\\(\\d개\\)";
+    private static final String ORDER_INPUT_UNIT_FORMAT = "[가-힣a-zA-Z0-9\\s]+\\(\\d개\\)";
     private final Scanner scanner;
 
     public InputView(Scanner scanner) {
