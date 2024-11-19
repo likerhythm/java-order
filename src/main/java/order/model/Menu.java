@@ -2,7 +2,7 @@ package order.model;
 
 import java.util.Arrays;
 
-public enum OrderMenu {
+public enum Menu {
 
     PIZZA("피자", 25000, "main"),
     HAMBURGER("햄버거", 10000, "main"),
@@ -22,7 +22,7 @@ public enum OrderMenu {
     private final long price;
     private final String type;
 
-    OrderMenu(String name, long price, String type) {
+    Menu(String name, long price, String type) {
         this.name = name;
         this.price = price;
         this.type = type;
@@ -32,8 +32,8 @@ public enum OrderMenu {
         return price * quantity;
     }
 
-    public static OrderMenu findByName(String targetName) {
-        return Arrays.stream(OrderMenu.values())
+    public static Menu findByName(String targetName) {
+        return Arrays.stream(Menu.values())
                 .filter(orderMenu -> orderMenu.name.equals(targetName))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("주문 형식이 잘못되었습니다."));
@@ -49,5 +49,9 @@ public enum OrderMenu {
 
     public boolean isService() {
         return type.equals("service");
+    }
+
+    public String getName() {
+        return name;
     }
 }

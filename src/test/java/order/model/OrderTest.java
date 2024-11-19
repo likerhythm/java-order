@@ -1,6 +1,6 @@
 package order.model;
 
-import order.dto.ReceiptOrderDto;
+import order.dto.OrderMenuDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -11,8 +11,8 @@ public class OrderTest {
 
     @Test
     void serviceTest() {
-        Order order = new Order(new HashMap<>(Map.of(OrderMenu.PIZZA, 1L)));
-        ReceiptOrderDto dto = order.getReceiptDto();
-        Assertions.assertEquals(1, dto.getService().size());
+        Order order = new Order(new HashMap<>(Map.of(Menu.PIZZA, 1L)));
+        OrderMenuDto dto = order.getOrderMenuDto();
+        Assertions.assertEquals(1, dto.getServices().size());
     }
 }

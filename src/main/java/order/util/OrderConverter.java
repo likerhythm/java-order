@@ -1,7 +1,7 @@
 package order.util;
 
 import order.model.Order;
-import order.model.OrderMenu;
+import order.model.Menu;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 public class OrderConverter {
 
     public Order convert(Map<String, String> menuNameAndQuantity) {
-        Map<OrderMenu, Long> orders = menuNameAndQuantity.entrySet().stream()
+        Map<Menu, Long> orders = menuNameAndQuantity.entrySet().stream()
                 .collect(Collectors.toMap(
-                        entry -> OrderMenu.findByName(entry.getKey()),
+                        entry -> Menu.findByName(entry.getKey()),
                         entry -> Long.parseLong(entry.getValue())
                 ));
         return new Order(orders);

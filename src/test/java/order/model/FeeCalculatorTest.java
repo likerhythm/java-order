@@ -12,8 +12,8 @@ public class FeeCalculatorTest {
 
     @Test
     void lessThanLowerLimitOrderFee() {
-        OrderMenu pizza = OrderMenu.PIZZA;
-        Map<OrderMenu, Long> orders = Map.of(pizza, 1L);
+        Menu pizza = Menu.PIZZA;
+        Map<Menu, Long> orders = Map.of(pizza, 1L);
         Order order = new Order(orders);
         Assertions.assertThrows(IllegalArgumentException.class, () -> feeCalculator.calcOrderFee(order));
     }
