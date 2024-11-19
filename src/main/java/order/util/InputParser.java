@@ -19,11 +19,15 @@ public class InputParser {
     private void makeUpParseOrder(String splitByDelimiter, Map<String, String> result) {
         String[] nameAndQuantity = splitByDelimiter.split("\\(");
         String menuName = nameAndQuantity[0];
-        if (menuName.startsWith(" ") || menuName.endsWith(" ")) {
+        if (isStartOrEndWithBlank(menuName)) {
             throw new IllegalArgumentException(ErrorMessage.WRONG_ORDER_FORMAT);
         }
         String rawQuantity = nameAndQuantity[1];
         String quantity = rawQuantity.substring(0, rawQuantity.length() - 2);
         result.put(menuName, quantity);
+    }
+
+    private boolean isStartOrEndWithBlank(String menuName) {
+        return menuName.startsWith(" ") || menuName.endsWith(" ");
     }
 }
