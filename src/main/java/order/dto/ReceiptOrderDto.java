@@ -1,4 +1,6 @@
-package order;
+package order.dto;
+
+import order.model.OrderMenu;
 
 import java.util.Map;
 

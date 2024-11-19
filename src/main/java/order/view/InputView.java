@@ -1,4 +1,4 @@
-package order;
+package order.view;
 
 import java.util.Scanner;
 

@@ -1,5 +1,6 @@
-package order;
+package order.model;
 
+import order.dto.ReceiptOrderDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

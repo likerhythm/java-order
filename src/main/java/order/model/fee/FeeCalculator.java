@@ -1,4 +1,6 @@
-package order;
+package order.model.fee;
+
+import order.model.Order;
 
 public class FeeCalculator {
 

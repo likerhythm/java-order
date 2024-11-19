@@ -1,4 +1,4 @@
-package order;
+package order.model;
 
 import java.util.Arrays;
 

@@ -1,4 +1,6 @@
-package order;
+package order.model;
+
+import order.dto.ReceiptOrderDto;
 
 import java.util.Map;
 import java.util.stream.Collectors;

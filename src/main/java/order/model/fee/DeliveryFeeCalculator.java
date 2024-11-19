@@ -1,4 +1,4 @@
-package order;
+package order.model.fee;
 
 import java.util.Map;
 

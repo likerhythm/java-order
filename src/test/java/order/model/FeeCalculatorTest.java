@@ -1,5 +1,6 @@
-package order;
+package order.model;
 
+import order.model.fee.FeeCalculator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
