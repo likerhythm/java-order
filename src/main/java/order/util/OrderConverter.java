@@ -1,7 +1,7 @@
 package order.util;
 
 import order.model.Order;
-import order.model.Menu;
+import order.model.menu.Menu;
 
 import java.util.Map;
 import java.util.stream.Collectors;

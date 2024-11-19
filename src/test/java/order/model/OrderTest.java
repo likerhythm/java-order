@@ -2,6 +2,7 @@ package order.model;
 
 import order.dto.OrderDetailDto;
 import order.dto.OrderMenuDto;
+import order.model.menu.Menu;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

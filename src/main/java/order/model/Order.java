@@ -3,6 +3,7 @@ package order.model;
 import order.dto.OrderDetailDto;
 import order.dto.OrderMenuDto;
 import order.error.ErrorMessage;
+import order.model.menu.Menu;
 
 import java.util.Map;
 import java.util.function.Predicate;
