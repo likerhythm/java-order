@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 public class Order {
 
+    private static final long LOWER_LIMIT_FEE = 30000;
+
     private final Map<Menu, Long> orders;
 
     public Order(final Map<Menu, Long> orders) {
@@ -21,7 +23,7 @@ public class Order {
 
     public long getFee() {
         long fee = calcFee();
-        if (fee < 30000) {
+        if (fee < LOWER_LIMIT_FEE) {
             throw new IllegalArgumentException(ErrorMessage.LESS_THAN_LOWER_ORDER_FEE_LIMIT);
         }
         return fee;
