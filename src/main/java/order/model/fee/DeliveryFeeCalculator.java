@@ -10,9 +10,9 @@ public class DeliveryFeeCalculator {
         this.rules = rules;
     }
 
-    public long calculateFee(final long orderCost) {
+    public long calculateFee(final long orderFee) {
         return rules.keySet().stream()
-                .filter(feeRange -> feeRange.isInRange(orderCost))
+                .filter(feeRange -> feeRange.isInRange(orderFee))
                 .map(rules::get)
                 .findFirst()
                 .orElseThrow();
