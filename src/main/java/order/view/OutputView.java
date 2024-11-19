@@ -49,7 +49,6 @@ public class OutputView {
     private void buildOrders(StringBuilder sb, OrderMenuDto orderMenuDto) {
         sb.append("[주문 내역]\n");
         Map<String, OrderDetailDto> orders = orderMenuDto.getOrders();
-
         for (String menuName : orders.keySet()) {
             OrderDetailDto detail = orders.get(menuName);
             long quantity = detail.getQuantity();

@@ -32,7 +32,7 @@ public class OrderController {
             Order order = getOrderFromUser();
             ReceiptDto receiptDto = makeReceiptDto(order);
             outputView.printReceipt(receiptDto);
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             System.out.println(Error.PREFIX + e.getMessage());
         }
     }
