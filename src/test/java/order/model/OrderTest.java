@@ -23,4 +23,11 @@ public class OrderTest {
         Order order = new Order(orders);
         Assertions.assertThrows(IllegalArgumentException.class, order::calcFee);
     }
+
+    @Test
+    void noServiceTest() {
+        Order order = new Order(new HashMap<>(Map.of(Menu.FRENCH_FRIES, 10L)));
+        OrderMenuDto dto = order.getOrderMenuDto();
+        Assertions.assertEquals(0, dto.getServices().size());
+    }
 }

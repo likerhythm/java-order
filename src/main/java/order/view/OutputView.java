@@ -30,15 +30,17 @@ public class OutputView {
         sb.append("배달비: ").append(NumberFormat.getInstance().format(deliveryFee)).append("원\n");
         sb.append("\n");
 
-        sb.append("[서비스]\n");
-        for (String menuName : services.keySet()) {
-            OrderDetailDto detail = services.get(menuName);
-            long quantity = detail.getQuantity();
-            //서비스 만두(5개)
-            sb.append(menuName).append("(").append(quantity).append("개)\n");
+        if (!services.isEmpty()) {
+            sb.append("[서비스]\n");
+            for (String menuName : services.keySet()) {
+                OrderDetailDto detail = services.get(menuName);
+                long quantity = detail.getQuantity();
+                //서비스 만두(5개)
+                sb.append(menuName).append("(").append(quantity).append("개)\n");
+            }
+            sb.append("\n");
         }
 
-        sb.append("\n");
         sb.append("[최종 결제 금액]\n");
         sb.append(NumberFormat.getInstance().format(totalFee)).append("원");
         System.out.println(sb);

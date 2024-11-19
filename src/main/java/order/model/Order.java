@@ -42,7 +42,9 @@ public class Order {
         long serviceCount = orders.keySet().stream()
                 .filter(Menu::isMain)
                 .count();
-        orders.merge(Menu.SERVICE_DUMPLING, serviceCount, Long::sum);
+        if (serviceCount > 0) {
+            orders.merge(Menu.SERVICE_DUMPLING, serviceCount, Long::sum);
+        }
     }
 
     private void validateAllDrink(Map<Menu, Long> orders) {
