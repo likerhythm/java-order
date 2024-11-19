@@ -41,7 +41,8 @@ public class Order {
     private void addServiceDumpling(Map<Menu, Long> orders) {
         long serviceCount = orders.keySet().stream()
                 .filter(Menu::isMain)
-                .count();
+                .mapToLong(orders::get)
+                .sum();
         if (serviceCount > 0) {
             orders.merge(Menu.SERVICE_DUMPLING, serviceCount, Long::sum);
         }
