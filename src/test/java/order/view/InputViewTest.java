@@ -15,7 +15,8 @@ public class InputViewTest {
     @ValueSource(strings = {
             "콜라(2개)",
             "콜라(2개), 햄버거(1개)",
-            "치킨(1개), 오렌지 주스(2개)"
+            "치킨(1개), 오렌지 주스(2개)",
+            "감자튀김(10개)"
     })
     void validOrderInputTest(String input) {
         inputView = new InputView(new Scanner(new ByteArrayInputStream(input.getBytes())));
