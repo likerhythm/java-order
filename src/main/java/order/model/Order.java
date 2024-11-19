@@ -19,19 +19,22 @@ public class Order {
         addServiceDumpling(orders);
     }
 
-    public long calcFee() {
-        long fee = orders.entrySet().stream()
-                .mapToLong(entry -> {
-                    Menu key = entry.getKey();
-                    Long value = entry.getValue();
-                    return key.calcFee(value);
-                })
-                .sum();
+    public long getFee() {
+        long fee = calcFee();
         if (fee < 30000) {
             throw new IllegalArgumentException(ErrorMessage.LESS_THAN_LOWER_ORDER_FEE_LIMIT);
         }
-
         return fee;
+    }
+
+    private long calcFee() {
+        return orders.entrySet().stream()
+                .mapToLong(entry -> {
+                    Menu menu = entry.getKey();
+                    Long value = entry.getValue();
+                    return menu.calcFee(value);
+                })
+                .sum();
     }
 
     public OrderMenuDto getOrderMenuDto() {
@@ -62,11 +65,13 @@ public class Order {
                 .filter(predicate)
                 .collect(Collectors.toMap(
                         entry -> entry.getKey().getName(),
-                        entry -> {
-                            long quantity = entry.getValue();
-                            long fee = entry.getKey().calcFee(quantity);
-                            return new OrderDetailDto(entry.getValue(), fee);
-                        }
+                        this::makeOrderDetailDto
                 ));
+    }
+
+    private OrderDetailDto makeOrderDetailDto(Map.Entry<Menu, Long> entry) {
+        long quantity = entry.getValue();
+        long fee = entry.getKey().calcFee(quantity);
+        return new OrderDetailDto(entry.getValue(), fee);
     }
 }

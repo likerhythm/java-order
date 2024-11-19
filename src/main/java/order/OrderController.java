@@ -2,6 +2,7 @@ package order;
 
 import order.dto.OrderMenuDto;
 import order.dto.ReceiptDto;
+import order.error.Error;
 import order.model.Order;
 import order.util.InputParser;
 import order.view.InputView;
@@ -27,13 +28,17 @@ public class OrderController {
     }
 
     public void start() {
-        Order order = getOrderFromUser();
-        ReceiptDto receiptDto = makeReceiptDto(order);
-        outputView.printReceipt(receiptDto);
+        try {
+            Order order = getOrderFromUser();
+            ReceiptDto receiptDto = makeReceiptDto(order);
+            outputView.printReceipt(receiptDto);
+        } catch(IllegalArgumentException e) {
+            System.out.println(Error.PREFIX + e.getMessage());
+        }
     }
 
     private ReceiptDto makeReceiptDto(Order order) {
-        long orderFee = order.calcFee();
+        long orderFee = order.getFee();
         long deliveryFee = orderService.calcDeliveryFee(orderFee);
         OrderMenuDto orderMenuDto = order.getOrderMenuDto();
         return new ReceiptDto(orderMenuDto, deliveryFee, orderFee + deliveryFee);

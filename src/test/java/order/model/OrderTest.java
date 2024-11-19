@@ -28,7 +28,7 @@ public class OrderTest {
         Menu pizza = Menu.PIZZA;
         Map<Menu, Long> orders = new HashMap<>(Map.of(pizza, 1L));
         Order order = new Order(orders);
-        Assertions.assertThrows(IllegalArgumentException.class, order::calcFee);
+        Assertions.assertThrows(IllegalArgumentException.class, order::getFee);
     }
 
     @Test

@@ -16,9 +16,18 @@ public class InputView {
     public String getOrder() {
         System.out.println("주문하실 메뉴와 수량을 입력해주세요. ex) 피자(2개), 감자튀김(1개), 콜라(3개)");
         String input = scanner.nextLine();
+        validateBlank(input);
+        validateOrderInputFormat(input);
+        return input;
+    }
+
+    private void validateBlank(String input) {
         if (input.isBlank()) {
             throw new IllegalArgumentException(ErrorMessage.WRONG_ORDER_FORMAT);
         }
+    }
+
+    private void validateOrderInputFormat(String input) {
         String[] splitInput = input.split(", ");
         for (String split : splitInput) {
             System.out.println(split);
@@ -26,6 +35,5 @@ public class InputView {
                 throw new IllegalArgumentException(ErrorMessage.WRONG_ORDER_FORMAT);
             }
         }
-        return input;
     }
 }
