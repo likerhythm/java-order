@@ -1,10 +1,17 @@
 # 미션 - 주문
 
+## 들어가며
+목차는 [📝기능 요구 사항](#-기능-요구-사항), [✅ 기능 목록](#-기능-목록), [🤔 고민거리](#-고민거리)로 구성되어 있습니다.<br>
+
+미션을 진행하며 여러 생각이 들었습니다.<br>
+그 중 여러 의견을 듣고 싶은 생각들을 **고민거리** 목차로 정리해보았습니다.<br>
+고민거리 목차는 개인 회고 느낌으로 작성한 점 참고해주세요!
+
 ## 🚀 진행 방식
 
 1. 미션 진행은 [미션 진행 가이드 문서](https://github.com/develup-mission/docs/blob/main/mission-guide.md)를 따른다.
 
-## 💻 기능 요구 사항
+## 📝 기능 요구 사항
 
 고객이 가게에 배달 주문을 하려고 합니다. 주문을 처리하기 위해 다음 사항을 고려해야 합니다.
 
@@ -111,8 +118,8 @@
 [최종 결제 금액]
 152,000원
 ```
-## 기능 목록
-
+## ✅ 기능 목록
+**bold**: 다양한 해석의 여지가 있는 항목
 - [x] 배달비 계산
   - [x] 주문 금액이 50,000원 미만일 경우 배달비는 2,000원입니다.
   - [x] 주문 금액이 50,000원 이상 ~ 100,000원 미만일 경우 배달비는 1,000원입니다.
@@ -134,3 +141,107 @@
   - [x] 서비스 만두는 서비스 내역에 추가됩니다.
     - ex) 서비스 만두(1개)
   - [x] 서비스 만두가 없을 경우 서비스 내역을 출력하지 않습니다.
+
+## 🤔 고민거리
+### 1. 배달비 구현
+처음에는 아래와 같이 배달비 정보를 `Enum`으로 구현하는 것이 좋다고 생각했다.
+```java
+package order;
+
+public enum DeliveryFeeRule {
+
+    STANDARD_DELIVERY_FEE_RULE(0, 49999, 2000),
+    DISCOUNTED_DELIVERY_FEE_RULE(50000, 99999, 1000),
+    FREE_DELIVERY_FEE_RULE(100000, Long.MAX_VALUE, 0);
+
+    private final long lowLimit;
+    private final long highLimit;
+    private final long fee;
+
+    DeliveryFeeRule(long lowLimit, long highLimit, long fee) {
+        this.lowLimit = lowLimit;
+        this.highLimit = highLimit;
+        this.fee = fee;
+    }
+
+    public boolean appliesTo(long orderCost) {
+        return this.lowLimit <= orderCost && orderCost <= this.highLimit;
+    }
+
+    public long calculateFee() {
+        return this.fee;
+    }
+}
+```
+하지만 추후에 배달비 정책이 바뀔 경우(예를 들어 배달비 정책이 더 세분화되어 새로운 상수가 필요한 경우) 유지보수가 어려울 것으로 생각했다.
+따라서 Map으로 간단하게 저장하는 방식으로 구현했다.(DeliveryFeeCalculator 참고)
+
+### 2. DTO에 대한 고찰
+캡슐화를 지키기 위해선 
+-> 도메인 내부의 값에 최대한 직접적으로 접근하지 못하도록 하는 것이 좋다.
+
+하지만 값을 출력할 때는 어쩔 수 없이 내부 값이 필요하다.
+도메인이 값을 출력 형태로 가공하여 직접 리턴하자니, 도메인이 출력 정책을 알고 있는 것도 좋지 않은 것 같다.
+왜냐하면 그런 구조는 view 정책이 바뀔 때 도메인 코드도 바뀌는 구조이며, 이런 구조는 좋지 않다고 생각하기 때문이다.
+-> 도메인 내부 값을 출력할 때는 dto를 사용하는 것이 좋을 것 같다.
+
+그렇다면 dto를 어디서 생성해야 좋을까?
+물론 도메인 내부에서 생성해야 한다. 하지만 dto가 많아진다면 도메인의 역할이 많아지지 않을까?
+도메인 내부에 dto를 생성하는 객체를 따로 두어서 책임을 분산하는 것은 어떨까?
+그렇다면 더 근본적으로, dto가 많아지는 것이 좋은 설계라고 말할 수 있는 걸까?
+
+💥 **DTO가 많아질 경우 단점**
+
+1. **복잡성 증가**:
+  - DTO가 많아지면 **관리와 유지보수가 어려워진다**.
+  - 특히, 비슷한 데이터 구조의 DTO가 중복되기 쉽다.
+2. **코드 중복 가능성**:
+  - 유사한 필드와 구조를 가진 DTO가 여러 개 생기면서 **중복 코드**가 발생할 수 있다.
+3. **변환 로직 증가**:
+  - DTO ↔ 도메인 간 매핑 로직이 많아질수록, 변환 코드가 복잡해지고 버그가 발생할 가능성이 증가한다.
+4. **오버 엔지니어링 위험**:
+  - 너무 많은 DTO를 정의하면 실제 필요 이상으로 코드가 복잡해질 수 있다.
+5. **네이밍 중복**
+  - 네이밍 지옥에 빠질 수 있다.(4주차 미션 진행하며 느낌)
+  - 
+🏃 **DTO 설계 최적화 방안**<br>
+
+**a. 재사용 가능한 공통 DTO 정의**
+
+- 중복되는 데이터 구조를 **공통 DTO**로 묶어 재사용한다.
+
+```java
+public class BaseResponseDto {
+    private String status;
+    private String message;
+}
+```
+
+- 공통 DTO를 상속하여 확장:
+
+```java
+public class UserResponseDto extends BaseResponseDto {
+    private String username;
+    private String email;
+}
+```
+
+---
+
+**b. 변환 로직 자동화 (외부 라이브러리 사용)**
+
+- **ModelMapper** 또는 **MapStruct** 같은 매핑 라이브러리를 사용하여 DTO ↔ 도메인 간 변환을 자동화 한다.
+
+```java
+@Mapper
+public interface UserMapper {
+    UserDto toDto(User user);
+    User toEntity(UserDto userDto);
+}
+```
+
+### 3. 테스트, 도대체 무엇부터 시작해야 하는가?
+
+작은 단위부터 테스트를 진행해야 한다. 
+왜냐하면 큰 단위를 먼저 하려고 하는 순간 작은 단위에 대한 테스트가 소홀해질 수 있기 때문이다.
+요구사항 분석 후 먼저 작은 단위를 생각하는 습관을 들여보자.
