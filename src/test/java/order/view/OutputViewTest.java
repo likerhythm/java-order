@@ -49,10 +49,11 @@ public class OutputViewTest {
     }
 
     private static ReceiptDto makeReceiptDto() {
-        Map<String, OrderDetailDto> orders = new LinkedHashMap<>(Map.of(
-                "피자", new OrderDetailDto(2, 50000),
-                "콜라", new OrderDetailDto(5, 10000)));
-        Map<String, OrderDetailDto> services = Map.of("서비스 만두", new OrderDetailDto(2, 0));
+        Map<String, OrderDetailDto> orders = new LinkedHashMap<>();
+        orders.put("피자", new OrderDetailDto(2, 50000));
+        orders.put("콜라", new OrderDetailDto(5, 10000));
+        Map<String, OrderDetailDto> services = new LinkedHashMap<>();
+        services.put("서비스 만두", new OrderDetailDto(2, 0));
         return new ReceiptDto(new OrderMenuDto(orders, services), 1000, 60000, 61000);
     }
 
