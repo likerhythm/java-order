@@ -5,7 +5,6 @@ import order.dto.OrderMenuDto;
 import order.error.ErrorMessage;
 import order.model.menu.Menu;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -31,6 +30,12 @@ public class Order {
         return fee;
     }
 
+    public OrderMenuDto getOrderMenuDto() {
+        Map<String, OrderDetailDto> nonServiceMenus = filterOrdersBy(entry -> !entry.getKey().isService());
+        Map<String, OrderDetailDto> serviceMenus = filterOrdersBy(entry -> entry.getKey().isService());
+        return new OrderMenuDto(nonServiceMenus, serviceMenus);
+    }
+
     private long calcFee() {
         return orders.entrySet().stream()
                 .mapToLong(entry -> {
@@ -39,12 +44,6 @@ public class Order {
                     return menu.calcFee(value);
                 })
                 .sum();
-    }
-
-    public OrderMenuDto getOrderMenuDto() {
-        Map<String, OrderDetailDto> nonServiceMenus = filterOrdersBy(entry -> !entry.getKey().isService());
-        Map<String, OrderDetailDto> serviceMenus = filterOrdersBy(entry -> entry.getKey().isService());
-        return new OrderMenuDto(nonServiceMenus, serviceMenus);
     }
 
     private void addServiceDumpling(Map<Menu, Long> orders) {

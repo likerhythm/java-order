@@ -6,7 +6,7 @@ public class OrderDetailDto {
     private final long fee;
 
     public OrderDetailDto(long quantity, long fee) {
-        this.quantity =quantity;
+        this.quantity = quantity;
         this.fee = fee;
     }
 

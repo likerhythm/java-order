@@ -35,17 +35,17 @@ public class OutputViewTest {
 
         String capturedOutput = outContent.toString();
         Assertions.assertTrue(capturedOutput.contains(
-                "[주문 내역]\n" +
-                "피자(2개): 50,000원\n" +
-                "콜라(5개): 10,000원\n" +
-                "총 주문 금액: 60,000원\n" +
-                "배달비: 1,000원\n" +
-                "\n" +
-                "[서비스]\n" +
-                "서비스 만두(2개)\n" +
-                "\n" +
-                "[최종 결제 금액]\n" +
-                "61,000원"));
+                        "[주문 내역]\n" +
+                        "피자(2개): 50,000원\n" +
+                        "콜라(5개): 10,000원\n" +
+                        "총 주문 금액: 60,000원\n" +
+                        "배달비: 1,000원\n" +
+                        "\n" +
+                        "[서비스]\n" +
+                        "서비스 만두(2개)\n" +
+                        "\n" +
+                        "[최종 결제 금액]\n" +
+                        "61,000원"));
     }
 
     private static ReceiptDto makeReceiptDto() {
