@@ -41,7 +41,7 @@ public class OrderController {
         long orderFee = order.getFee();
         long deliveryFee = orderService.calcDeliveryFee(orderFee);
         OrderMenuDto orderMenuDto = order.getOrderMenuDto();
-        return new ReceiptDto(orderMenuDto, deliveryFee, orderFee + deliveryFee);
+        return new ReceiptDto(orderMenuDto, deliveryFee, orderFee, orderFee + deliveryFee);
     }
 
     private Order getOrderFromUser() {

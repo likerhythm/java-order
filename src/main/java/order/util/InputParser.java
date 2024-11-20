@@ -24,6 +24,11 @@ public class InputParser {
         }
         String rawQuantity = nameAndQuantity[1];
         String quantity = rawQuantity.substring(0, rawQuantity.length() - 2);
+        if (result.containsKey(menuName)) {
+            result.merge(menuName, quantity, (oldValue, newValue) ->
+                    String.valueOf(Integer.parseInt(oldValue) + Integer.parseInt(newValue)));
+            return;
+        }
         result.put(menuName, quantity);
     }
 

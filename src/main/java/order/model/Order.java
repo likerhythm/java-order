@@ -5,6 +5,8 @@ import order.dto.OrderMenuDto;
 import order.error.ErrorMessage;
 import order.model.menu.Menu;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -63,12 +65,14 @@ public class Order {
     }
 
     private Map<String, OrderDetailDto> filterOrdersBy(Predicate<Map.Entry<Menu, Long>> predicate) {
-        return orders.entrySet().stream()
+        return new LinkedHashMap<>(orders.entrySet().stream()
                 .filter(predicate)
                 .collect(Collectors.toMap(
                         entry -> entry.getKey().getName(),
-                        this::makeOrderDetailDto
-                ));
+                        this::makeOrderDetailDto,
+                        (oldValue, newValue) -> oldValue,
+                        LinkedHashMap::new
+                )));
     }
 
     private OrderDetailDto makeOrderDetailDto(Map.Entry<Menu, Long> entry) {

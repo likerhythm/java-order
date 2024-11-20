@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class OutputViewTest {
@@ -33,15 +34,26 @@ public class OutputViewTest {
         outputView.printReceipt(receiptDto);
 
         String capturedOutput = outContent.toString();
-        Assertions.assertTrue(capturedOutput.contains("피자(2개): 50,000원"), "[서비스 내역]\n서비스 만두(2개)");
+        Assertions.assertTrue(capturedOutput.contains(
+                "[주문 내역]\n" +
+                "피자(2개): 50,000원\n" +
+                "콜라(5개): 10,000원\n" +
+                "총 주문 금액: 60,000원\n" +
+                "배달비: 1,000원\n" +
+                "\n" +
+                "[서비스]\n" +
+                "서비스 만두(2개)\n" +
+                "\n" +
+                "[최종 결제 금액]\n" +
+                "61,000원"));
     }
 
     private static ReceiptDto makeReceiptDto() {
-        Map<String, OrderDetailDto> orders = Map.of(
+        Map<String, OrderDetailDto> orders = new LinkedHashMap<>(Map.of(
                 "피자", new OrderDetailDto(2, 50000),
-                "콜라", new OrderDetailDto(5, 10000));
+                "콜라", new OrderDetailDto(5, 10000)));
         Map<String, OrderDetailDto> services = Map.of("서비스 만두", new OrderDetailDto(2, 0));
-        return new ReceiptDto(new OrderMenuDto(orders, services), 1000, 61000);
+        return new ReceiptDto(new OrderMenuDto(orders, services), 1000, 60000, 61000);
     }
 
     @AfterEach

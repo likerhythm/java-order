@@ -30,7 +30,6 @@ public class InputView {
     private void validateOrderInputFormat(String input) {
         String[] splitInput = input.split(", ");
         for (String split : splitInput) {
-            System.out.println(split);
             if (!split.matches(ORDER_INPUT_UNIT_FORMAT)) {
                 throw new IllegalArgumentException(ErrorMessage.WRONG_ORDER_FORMAT);
             }

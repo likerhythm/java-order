@@ -9,6 +9,12 @@ import java.util.Map;
 
 public class OutputView {
 
+    private static final String ORDER_HISTORY_FORMAT = "%s(%d개): %s원\n";
+    private static final String ORDER_FEE_FORMAT = "총 주문 금액: %s원\n";
+    private static final String DELIVERY_FEE_FORMAT = "배달비: %s원\n";
+    private static final String SERVICE_HISTORY_FORMAT = "%s(%s개)\n";
+    private static final String TOTAL_FEE_FORMAT = "%s원";
+
     public void printReceipt(ReceiptDto receiptDto) {
         OrderMenuDto orderMenuDto = receiptDto.getOrderMenuDto();
         StringBuilder sb = new StringBuilder();
@@ -17,8 +23,9 @@ public class OutputView {
     }
 
     private void buildReceipt(ReceiptDto receiptDto, StringBuilder sb, OrderMenuDto orderMenuDto) {
-        buildDeliveryFee(sb, receiptDto.getDeliveryFee());
         buildOrders(sb, orderMenuDto);
+        sb.append(String.format(ORDER_FEE_FORMAT, NumberFormat.getInstance().format(receiptDto.getOrderFee())));
+        buildDeliveryFee(sb, receiptDto.getDeliveryFee());
         Map<String, OrderDetailDto> services = orderMenuDto.getServices();
         if (!services.isEmpty()) {
             buildServices(sb, services);
@@ -28,7 +35,7 @@ public class OutputView {
 
     private void buildTotalFee(StringBuilder sb, long totalFee) {
         sb.append("[최종 결제 금액]\n");
-        sb.append(NumberFormat.getInstance().format(totalFee)).append("원");
+        sb.append(String.format(TOTAL_FEE_FORMAT, NumberFormat.getInstance().format(totalFee)));
     }
 
     private void buildServices(StringBuilder sb, Map<String, OrderDetailDto> services) {
@@ -36,13 +43,13 @@ public class OutputView {
         for (String menuName : services.keySet()) {
             OrderDetailDto detail = services.get(menuName);
             long quantity = detail.getQuantity();
-            sb.append(menuName).append("(").append(quantity).append("개)\n");
+            sb.append(String.format(SERVICE_HISTORY_FORMAT, menuName, quantity));
         }
         sb.append("\n");
     }
 
     private void buildDeliveryFee(StringBuilder sb, long deliveryFee) {
-        sb.append("배달비: ").append(NumberFormat.getInstance().format(deliveryFee)).append("원\n");
+        sb.append(String.format(DELIVERY_FEE_FORMAT, NumberFormat.getInstance().format(deliveryFee)));
         sb.append("\n");
     }
 
@@ -53,7 +60,7 @@ public class OutputView {
             OrderDetailDto detail = orders.get(menuName);
             long quantity = detail.getQuantity();
             long fee = detail.getFee();
-            sb.append(menuName).append("(").append(quantity).append("개): ").append(NumberFormat.getInstance().format(fee)).append("원\n");
+            sb.append(String.format(ORDER_HISTORY_FORMAT, menuName, quantity, NumberFormat.getInstance().format(fee)));
         }
     }
 }
